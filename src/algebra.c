@@ -267,7 +267,7 @@ Matrix inv_matrix(Matrix a)
     }
     else
     {
-        printf("Error: The matrix must be a square matrix or.\n");
+        printf("Error: The matrix must be a square matrix.\n");
         return create_matrix(0, 0);
     }
     
@@ -281,7 +281,7 @@ Matrix inv_matrix(Matrix a)
 */
 int rank_matrix(Matrix a)
 {
-    int rank,n0_row;
+    int rank,n0_row,n0_matrix=0;
     double temp;
     Matrix a_ope = a;
     if (a.rows < a.cols)
@@ -292,44 +292,76 @@ int rank_matrix(Matrix a)
     {
         rank = a.cols;
     }
-    
-    for (int i = 0; i < a.cols; i++)
+    if (rank == 1)
     {
-        if(a_ope.data[i][i]==0){
-            n0_row = a.rows;
-            for(int p=i+1 ; p<a.rows ; p++){
-                if (a_ope.data[p][i] != 0)
+        for (int i = 0; i < a.rows; i++)
+        {
+            for (int j = 0; j < a.cols; j++)
+            {
+                if (a.data[i][j] != 0)
                 {
-                    n0_row = p;
+                    n0_matrix=1;
                     break;
                 }
                 
             }
-            if (n0_row==a.rows)
-            {
-                rank -= 1;
-                continue;
+            if(n0_matrix){
+                break;
             }
-            else
-            {
-                for (int n = i; n < a_ope.rows; n++)
-                {
-                    a_ope.data[i][n],a_ope.data[n0_row][n]=a_ope.data[n0_row][n],a_ope.data[i][n];
-
-                }
-                
-            }
-            
         }
-        for (int j = i+1; j < a.rows; j++)
+        if (n0_matrix)
         {
-            for (int k = a.cols-1; k >=  i; k--)
-            {
-                a_ope.data[j][k]=a_ope.data[j][k]-a_ope.data[j][i]*a_ope.data[i][k]/a_ope.data[i][i];
-            }
-            
+            rank=1;
         }
+        else
+        {
+            rank=0;
+        }
+        
+    }
+    else
+    {
+        for (int i = 0; i < a.cols; i++)
+        {
+            if(a_ope.data[i][i]==0){
+                n0_row = a.rows;
+                for(int p=i+1 ; p<a.rows ; p++){
+                    if (a_ope.data[p][i] != 0)
+                    {
+                        n0_row = p;
+                        break;
+                    }
+                
+                }
+                if (n0_row==a.rows)
+                {
+                    rank -= 1;
+                    continue;
+                }
+                else
+                {
+                    for (int n = i; n < a_ope.rows; n++)
+                    {
+                        temp = a_ope.data[i][n];
+                        a_ope.data[i][n] = a_ope.data[n0_row][n];
+                        a_ope.data[n0_row][n]=temp;
 
+                    }
+                
+                }
+            
+            }
+
+            for (int j = i+1; j < a.rows; j++)
+            {
+                for (int k = a.cols-1; k >=  i; k--)
+                {
+                    a_ope.data[j][k]=a_ope.data[j][k]-a_ope.data[j][i]*a_ope.data[i][k]/a_ope.data[i][i];
+                }
+            
+            }
+
+        }
     }
     
     return rank;
