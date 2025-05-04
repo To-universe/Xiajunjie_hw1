@@ -16,5 +16,15 @@
             "command": "extension.execute",
             "priority": 4
         }
-    ]
+    ],
+    "files.associations": {
+        "stdio.h": "c",
+        "math.h": "c",
+        "algebra.h":"c"
+    },
+    "cmake.congifureSettings":{
+        "CMAKE_C_COMPILER":"E:\\mingw64\\bin\\gcc.exe"
+    },
+    "cmake.generator":"MinGW Makefiles",
+    "cmake.buildDirectory":"${workspaceFolder}/build"
 }
